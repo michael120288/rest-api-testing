@@ -3,7 +3,6 @@ import {config} from "../config";
 import {expectRejected} from "../test-units";
 
 const url = `${config.BASE_URL}/signin`;
-console.log(url,'url');
 const wrongCredentials = {
   username: 'notarealuser99999',
   password: 'WrongPass@9999',
@@ -50,7 +49,6 @@ describe("Exact value assertions",() =>{
         expect(typeof sharedResponse.data.message).toBe('string');
         expect(sharedResponse.data.message).not.toBe('');
         expect(sharedResponse.data.message.length).toBeGreaterThan(0);
-        console.log(sharedResponse,'message');
     })
 })
 
@@ -72,7 +70,6 @@ describe("Boundary Value Analysis",() =>{
     it("username shorter than 4 chars", async() =>{
        
         const res = await axios.post(url, {username: 'abc', password: 'ValidPass@123'}, {validateStatus: () => true});
-        console.log(res.data,'boundary');
         if(res.status === 400) {
             expect(res.data).toHaveProperty('message');
             expectRejected(res.status);
@@ -82,7 +79,6 @@ describe("Boundary Value Analysis",() =>{
      it("password longer than 128 chars", async() =>{
        
         const res = await axios.post(url, {username: 'validuser', password: 'A@1' + 'a'.repeat(128)}, {validateStatus: () => true});
-        console.log(res.data,'boundary');
         if(res.status === 400) {
             expect(res.data).toHaveProperty('message');
             expectRejected(res.status);
@@ -93,11 +89,7 @@ describe("Boundary Value Analysis",() =>{
 
 describe.only("Verifing headers",() =>{
     it("username shorter than 4 chars", async() =>{
-       
         const res = await axios.post(url, {username: 'abc', password: 'ValidPass@123'}, {validateStatus: () => true});
-        console.log(res,'boundary');
         expect(res.headers['content-type']).toContain('application/json');
-        
-    })
-     
+    })   
 })
